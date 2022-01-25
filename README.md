@@ -1,2 +1,0 @@
-# ASSMU-Website-Backend
-Backend 
