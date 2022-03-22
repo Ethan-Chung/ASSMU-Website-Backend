@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', async(req, res) => {
     const data = await bucket.getObjects({
         query: {
-            type: 'posts'
+            type: 'posts',
         },
         props: 'slug,title,content,metadata'
     })
@@ -26,7 +26,17 @@ app.get('/', async(req, res) => {
     res.set('Content-Type', 'text/html')  
     res.send(posts);
 });
-
+app.get('/officers', async(req, res) => {
+    const data = await bucket.getObjects({
+        query: {
+            type: 'officers',
+        },
+        props: 'slug,title,content,metadata'
+    })
+    const posts = data.objects;
+    res.set('Content-Type', 'text/html')  
+    res.send(posts);
+});
 
 app.listen(PORT, () => {
     console.log("running on port 3001");
