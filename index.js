@@ -26,10 +26,23 @@ app.get('/', async(req, res) => {
     res.set('Content-Type', 'text/html')  
     res.send(posts);
 });
+
 app.get('/officers', async(req, res) => {
     const data = await bucket.getObjects({
         query: {
             type: 'officers',
+        },
+        props: 'slug,title,content,metadata'
+    })
+    const posts = data.objects;
+    res.set('Content-Type', 'text/html')  
+    res.send(posts);
+});
+
+app.get('/resources', async(req, res) => {
+    const data = await bucket.getObjects({
+        query: {
+            type: 'resources',
         },
         props: 'slug,title,content,metadata'
     })
