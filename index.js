@@ -4,9 +4,11 @@ const privatekey = require('./privatekey.json');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const app2 = express();
 const Cosmic = require('cosmicjs');
 const api = Cosmic();
 const PORT = process.env.PORT || 3001;
+const PORT2 = process.env.PORT || 3002;
 
 // Provide the required configuration
 const calendarId = 'assmu.dev@gmail.com';
@@ -38,9 +40,12 @@ const getEvents = async () => {
 	}
 };
 
-let calendarevents = getEvents() // returns a promise
+getEvents() // returns a promise
 	.then((res) => {
-		console.log(res); // shows array of objects
+		app2.get('/', async (req, result) => {
+			result.set('Content-Type', 'text/html');
+			result.send(res);
+		});
 	})
 	.catch((err) => {
 		console.log(err);
@@ -67,6 +72,14 @@ app.get('/', async (req, res) => {
 	res.send(posts);
 });
 
+app2.use(cors());
+app2.use(express.json());
+app2.use(bodyParser.urlencoded({ extended: true }));
+
 app.listen(PORT, () => {
 	console.log('running on port 3001');
+});
+
+app2.listen(PORT2, () => {
+	console.log('running on port 3002');
 });
