@@ -60,6 +60,10 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app2.use(cors());
+app2.use(express.json());
+app2.use(bodyParser.urlencoded({ extended: true }));
+
 app.get('/', async (req, res) => {
 	const data = await bucket.getObjects({
 		query: {
@@ -72,9 +76,29 @@ app.get('/', async (req, res) => {
 	res.send(posts);
 });
 
-app2.use(cors());
-app2.use(express.json());
-app2.use(bodyParser.urlencoded({ extended: true }));
+app.get('/officers', async (req, res) => {
+	const data = await bucket.getObjects({
+		query: {
+			type: 'officers',
+		},
+		props: 'slug,title,content,metadata',
+	});
+	const posts = data.objects;
+	res.set('Content-Type', 'text/html');
+	res.send(posts);
+});
+
+app.get('/resources', async (req, res) => {
+	const data = await bucket.getObjects({
+		query: {
+			type: 'resources',
+		},
+		props: 'slug,title,content,metadata',
+	});
+	const posts = data.objects;
+	res.set('Content-Type', 'text/html');
+	res.send(posts);
+});
 
 app.listen(PORT, () => {
 	console.log('running on port 3001');
